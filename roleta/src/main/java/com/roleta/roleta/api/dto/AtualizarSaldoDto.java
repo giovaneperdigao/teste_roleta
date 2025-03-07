@@ -2,16 +2,14 @@ package com.roleta.roleta.api.dto;
 
 
 public record AtualizarSaldoDto(
-
-        Integer valor,
-        Boolean vitoria
-
+        Integer valorAposta,
+        Integer numeroSelecionado
 ) {
-        public Integer getValor() {
-                return valor;
+        public Integer getValorAposta() {
+                return valorAposta;
         }
 
-        public Boolean getVitoria() {
-                return vitoria;
+        public Integer getNumeroSelecionado() {
+                return numeroSelecionado;
         }
 }

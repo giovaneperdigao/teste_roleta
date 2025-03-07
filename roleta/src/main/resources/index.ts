@@ -181,7 +181,9 @@ function drawSaldo () {
         saldoGeral = s
         textoSaldo.text =  "Saldo: " + s
 
-        if (valorBet > saldoGeral) {
+        if (saldoGeral < 50) {
+            gameOver()
+        } else if (valorBet > saldoGeral) {
             valorBet = 50;
             drawValorBet();
         }
@@ -197,37 +199,19 @@ function bet(n: NumeroRoleta, x: number, y: number) {
 }
 
 function spin() {
-    let tempo = Math.random() * 100;
-    let printed = false;
-    app.ticker.add((ticker) => {
-        if (tempo > 1) {            
-            let rotation = (0.1 + (0.05 * tempo))
-            roleta.rotation += rotation * ticker.deltaTime;
-        } else {
-            if (!printed) {                
-                printed = true;
-                compararResultado(getResult());
-            }                
-        }
-        tempo -= ticker.deltaTime;
-    });
+    atualizarSaldo({ valorAposta: valorBet, numeroSelecionado: valorSelecionado  }).then(s => {
+        let resultado = getResult(s);
+        roleta.angle = resultado + 5;
+    })
 }
 
-function getResult() : NumeroRoleta {
-    let resultado = numeros[Math.floor((roleta.angle % 360) / limite_angulos)];
+function getResult(numeroSorteado: number) : number {
+    let resultado = numeros[numeroSorteado]
     resultadoRoleta.text = resultado.valor;
     resultadoRoleta.style.fill = resultado.cor as PIXI.FillInput;
     
-    return resultado;
+    return (limite_angulos * resultado.ordem);
 }
-        
-function compararResultado(r: NumeroRoleta) : boolean {
-    let retorno = (valorSelecionado == r.valor);
-
-    atualizarSaldo({ valor: valorBet, vitoria: retorno });    
-    return retorno;
-}
-
 
 function getSaldo(): Promise<number> {
     return fetch('http://localhost:8080/bets')
@@ -238,7 +222,7 @@ function getSaldo(): Promise<number> {
     )
 }
 
-function atualizarSaldo(atualizarSaldoDto: AtualizarSaldoDto): Promise<void> {
+function atualizarSaldo(atualizarSaldoDto: AtualizarSaldoDto): Promise<number> {
     const headers: Headers = new Headers()
     headers.set('Content-Type', 'application/json')
     headers.set('Accept', 'application/json')
@@ -253,12 +237,8 @@ function atualizarSaldo(atualizarSaldoDto: AtualizarSaldoDto): Promise<void> {
     return fetch(request)
         .then(res => res.json())
         .then(res => {
-            console.log(res)
-            if (res > 0) {
-                drawSaldo()
-            } else {
-                gameOver()
-            }            
+            drawSaldo()
+            return res as number
         })
   }
 
@@ -271,12 +251,9 @@ function atualizarSaldo(atualizarSaldoDto: AtualizarSaldoDto): Promise<void> {
     gameOverSprite.on('pointerdown', restart);
 
     app.stage.addChild(gameOverSprite);
-    console.log("gameover");
   }
 
   function restart(): Promise<number> {
-    console.log("restart");
-
     return fetch('http://localhost:8080/bets/reset')
         .then(res => res.json())
         .then(res => {

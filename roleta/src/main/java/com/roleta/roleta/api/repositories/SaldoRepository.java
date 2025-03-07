@@ -1,7 +1,5 @@
 package com.roleta.roleta.api.repositories;
 
-import com.roleta.roleta.api.dto.*;
-
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -9,11 +7,11 @@ public class SaldoRepository {
 
     Integer saldo = 1000;
 
-    public Integer atualizarSaldo(AtualizarSaldoDto atualizarSaldoDto) {
-        if (atualizarSaldoDto.getVitoria()){
-            saldo += atualizarSaldoDto.getValor();
+    public Integer atualizarSaldo(Integer valorAposta, Boolean vitoria) {
+        if (vitoria) {
+            saldo += valorAposta;
         } else  {
-            saldo -= atualizarSaldoDto.getValor();
+            saldo -= valorAposta;
         }
         
         return getSaldo();

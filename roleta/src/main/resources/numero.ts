@@ -28,7 +28,7 @@ export class NumeroRoleta {
             new NumeroRoleta(13, 21, "#000000"),
             new NumeroRoleta(14, 4, "#FF0000"),
             new NumeroRoleta(15, 19, "#000000"),
-            new NumeroRoleta(16, 15, "#FF0000"),
+            new NumeroRoleta(16, 16, "#FF0000"),
             new NumeroRoleta(17, 32, "#000000"),
             new NumeroRoleta(18, 0, "#00FF00"),
             new NumeroRoleta(19, 26, "#FF0000"),
@@ -46,7 +46,7 @@ export class NumeroRoleta {
             new NumeroRoleta(31, 20, "#FF0000"),
             new NumeroRoleta(32, 1, "#000000"),
             new NumeroRoleta(33, 33, "#FF0000"),
-            new NumeroRoleta(34, 16, "#000000"),
+            new NumeroRoleta(34, 15, "#000000"),
             new NumeroRoleta(35, 24, "#FF0000"), 
             new NumeroRoleta(36, 5, "#000000")
         ]
@@ -54,11 +54,11 @@ export class NumeroRoleta {
 }
 
 export class AtualizarSaldoDto {
-    valor: number;
-    vitoria: boolean;
+    valorAposta: number;
+    numeroSelecionado: number;
 
-    constructor(vitoria: boolean, valor: number) {
-        this.valor = valor;
-        this.vitoria = vitoria;
+    constructor(valorAposta: number, numeroSelecionado: number) {
+        this.valorAposta = valorAposta;
+        this.numeroSelecionado = numeroSelecionado;
     }
 }
