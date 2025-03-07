@@ -41,7 +41,9 @@ const estiloBet = new PIXI.TextStyle({
 const resultadoRoleta = new PIXI.Text({ text: '10', style : estiloRoleta });
 const numeroEscolhidoText = new PIXI.Text({ text: '', style : estiloBet });
 const textoSaldo = new PIXI.Text({ text: '', style : style });
+const textoGanhos = new PIXI.Text({ text: '', style : style });
 const valorBetText = new PIXI.Text({ text: '', style : style });
+
 
 let valorSelecionado : number;
 let valorBet : number = 50;
@@ -64,6 +66,8 @@ function init() {
             
             app.stage.addChild(numeroEscolhidoText);       
             app.stage.addChild(textoSaldo);
+            app.stage.addChild(textoGanhos);
+            
             app.stage.addChild(valorBetText);
 
             roleta.width = roleta.width * 1.25;
@@ -73,8 +77,11 @@ function init() {
             numeroEscolhidoText.x = 10
             numeroEscolhidoText.y = 10
     
-            textoSaldo.x = app.screen.width - 400
+            textoSaldo.x = app.screen.width - 350
             textoSaldo.y = 10
+
+            textoGanhos.x  = app.screen.width - 350
+            textoGanhos.y = app.screen.height / 2
 
             valorBetText.x = app.screen.width - 500
             valorBetText.y = app.screen.height - 100
@@ -202,6 +209,13 @@ function spin() {
     atualizarSaldo({ valorAposta: valorBet, numeroSelecionado: valorSelecionado  }).then(s => {
         let resultado = getResult(s);
         roleta.angle = resultado + 5;
+        
+        if (valorSelecionado == s) {
+            textoGanhos.text = "Ganhou: "  + valorBet;
+        } else {
+            textoGanhos.text = "Perdeu: "  + valorBet;
+        }
+            
     })
 }
 
@@ -260,6 +274,7 @@ function atualizarSaldo(atualizarSaldoDto: AtualizarSaldoDto): Promise<number> {
             app.stage.removeChild(gameOverSprite);
             valorBet = 50;
             drawSaldo();
+            drawValorBet();
             return res as number
         }
     )

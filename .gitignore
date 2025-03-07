@@ -35,3 +35,7 @@ build/
 node_modules/
 .mvn/
 /target
+dist/
+node/
+
+package-lock.json
